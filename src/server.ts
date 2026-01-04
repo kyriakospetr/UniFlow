@@ -1,4 +1,7 @@
-import express, { type Request, type Response, type Application } from 'express';
+import express, { type Application, type NextFunction } from 'express';
+import cookieParser from 'cookie-parser';
+import appRoutes from './global/routes/app.routes';
+import { StatusCodes } from "http-status-codes";
 
 class Server {
     private app: Application;
@@ -17,7 +20,8 @@ class Server {
     }
 
     private setupMiddleware(): void {
-
+        this.app.use(express.json());
+        this.app.use(cookieParser());
     }
 
     private setupExpressConfig():void {
@@ -25,11 +29,11 @@ class Server {
     }
 
     private setupRoutes(): void {
-
+        appRoutes(this.app);
     }
 
     private setupErrorHandler(): void {
-
+        
     }
 
     private setupServer(): void {
