@@ -1,18 +1,11 @@
-export interface LocalSignUpDTO {
+export interface SignUpDTO {
     email: string;
     username: string;
     password: string;
 }
 
-export interface SocialSignUpDTO {
-    socialId: string;
-}
-
-export interface LocalLoginDTO {
+export interface LoginDTO {
     email: string;
     password: string;
 }
 
-export interface SocialLoginDTO {
-    socialId: string;
-}
