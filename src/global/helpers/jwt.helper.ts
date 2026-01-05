@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import type { User } from '../../../generated/prisma/browser'
+import type { User } from '../../../generated/prisma/browser.js'
 
 export function genereateJWT(user: User): string {
     const accessToken = jwt.sign({

@@ -52,3 +52,18 @@ body {
     box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     margin-bottom: 20px;
 }
+
+.chat-popup {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 400px;
+    z-index: 1000;
+}
+
+.card-body {
+    height: 250px; 
+    overflow-y: auto; 
+    background: #f8f9fa
+}

@@ -6,7 +6,7 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
-        "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts"
+        "dev": "nodemon --watch src --ext ts,js --exec tsx src/index.ts"
     },
     "author": "",
     "dependencies": {

@@ -1,9 +1,9 @@
 import express, { type Request, type Response, type Application, type NextFunction } from 'express';
 import cookieParser from 'cookie-parser';
-import appRoutes from './global/routes/app.routes.ts';
+import appRoutes from './global/routes/app.routes.js';
+import pageRouter from './global/routes/page.routes.js';
 import { StatusCodes } from "http-status-codes";
 import path from 'path';
-import pageRouter from './global/routes/page.routes.ts';
 import './global/config/passport.config.ts';
 import passport from 'passport';
 

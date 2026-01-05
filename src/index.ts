@@ -1,4 +1,4 @@
-import Server from "./server.ts";
+import Server from "./server.js";
 
 class Uniflow {
     private server: Server;

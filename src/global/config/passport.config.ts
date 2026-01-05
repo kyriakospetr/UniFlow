@@ -1,6 +1,6 @@
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import passport, { type Profile } from 'passport';
-import { authService } from '../../features/auth/services/auth.service.ts';
+import { authService } from '../../features/auth/services/auth.service.js';
 
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID!,

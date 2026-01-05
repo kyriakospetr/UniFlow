@@ -1,5 +1,5 @@
 import { type Request, type Response, type NextFunction } from 'express';
-import { BadRequestException } from '../cores/error.core';
+import { BadRequestException } from '../cores/error.core.js';
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
 

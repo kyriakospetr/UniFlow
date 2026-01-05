@@ -1,6 +1,6 @@
 import { type NextFunction, type Request, type Response } from "express";
-import { authService } from "../services/auth.service.ts";
-import { sendTokenToCookie } from "../../../global/helpers/cookie.helper.ts";
+import { authService } from "../services/auth.service.js";
+import { sendTokenToCookie } from "../../../global/helpers/cookie.helper.js";
 import { StatusCodes } from "http-status-codes";
 import passport from "passport";
 
@@ -40,12 +40,14 @@ class AuthController {
 
             sendTokenToCookie(res, accessToken);
             
-            return res.redirect('http://localhost:3000/dashboard');
+            return res.redirect('http://localhost:3000/');
         })(req, res, next);
     }
 
     public async logout(req: Request, res: Response) {
-        res.clearCookie('accessToken');
+        res.clearCookie('accessToken', {
+            path: '/'
+        });
 
         return res.status(StatusCodes.OK).json({
             message: "User logged out successfully"

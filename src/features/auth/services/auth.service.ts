@@ -1,9 +1,9 @@
 import type { Profile } from 'passport';
-import type { User } from '../../../../generated/prisma/client.ts';
-import { BadRequestException } from '../../../global/cores/error.core.ts';
-import { genereateJWT } from '../../../global/helpers/jwt.helper.ts';
-import { prisma } from '../../../prisma.ts';
-import type { LoginDTO, SignUpDTO } from '../interfaces/auth.interface.ts';
+import { BadRequestException } from '../../../global/cores/error.core.js';
+import { genereateJWT } from '../../../global/helpers/jwt.helper.js';
+import { prisma } from '../../../prisma.js';
+import type { LoginDTO, SignUpDTO } from '../interfaces/auth.interface.js';
+import { userService } from '../../users/services/user.service.js';
 import bcrypt from 'bcrypt';
 
 class AuthService {
@@ -11,9 +11,9 @@ class AuthService {
         const { email, username, password } = reqBody;
 
         // Check if there is a user with the same email or username
-        const userUniqueEmail = await this.findUserByEmail(email);
+        const userUniqueEmail = await userService.findUserByEmail(email);
 
-        const userUniqueUsername = await this.findUserByUsername(username);
+        const userUniqueUsername = await userService.findUserByUsername(username);
 
         if (userUniqueEmail) {
             throw new BadRequestException('Email is already in use');
@@ -46,7 +46,7 @@ class AuthService {
         const { email, password } = reqBody;
 
         // Find the user
-        const user = await this.findUserByEmail(email);
+        const user = await userService.findUserByEmail(email);
 
         // If user is null throw error
         if (!user) {
@@ -122,22 +122,6 @@ class AuthService {
 
         // Return JWT
         return genereateJWT(user);
-    }
-    
-    private async findUserByEmail(email: string): Promise<User | null> {
-        return await prisma.user.findUnique({
-            where: {
-                email: email,
-            },
-        });
-    }
-
-    private async findUserByUsername(username: string): Promise<User | null> {
-        return await prisma.user.findUnique({
-            where: {
-                username: username,
-            },
-        });
     }
 }
 

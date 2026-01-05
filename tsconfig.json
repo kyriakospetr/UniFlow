@@ -1,11 +1,10 @@
 {
   "compilerOptions": {
     "rootDir": ".",
-    "module": "ESNext",
-    "moduleResolution": "Bundler", 
-    "target": "ESNext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext", 
+    "target": "esnext",
     "esModuleInterop": true,
-    "allowImportingTsExtensions": true,
     "noEmit": true,
     "strict": true,
     "skipLibCheck": true

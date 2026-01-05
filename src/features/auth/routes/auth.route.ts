@@ -1,8 +1,8 @@
 import { Router } from "express";
-import asyncWrapper from "../../../global/cores/asyncWrapper.core.ts";
-import { authController } from "../controllers/auth.controller.ts";
-import { validateSchema } from "../../../global/middlewares/validate.schema.middleware.ts";
-import { LoginSchema, SignUpSchema } from "../schema/auth.schema.ts";
+import asyncWrapper from "../../../global/cores/asyncWrapper.core.js";
+import { authController } from "../controllers/auth.controller.js";
+import { validateSchema } from "../../../global/middlewares/validate.schema.middleware.js";
+import { LoginSchema, SignUpSchema } from "../schema/auth.schema.js";
 
 
 const authRouter = Router();
