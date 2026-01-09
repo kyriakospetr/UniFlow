@@ -2,6 +2,7 @@ import { type Request, type Response, type NextFunction } from 'express';
 import { z, ZodError } from 'zod';
 import { StatusCodes } from 'http-status-codes';
 
+//We validate the req.body
 export function validateSchema(schema: z.ZodTypeAny) { 
   return (req: Request, res: Response, next: NextFunction) => {
     try {

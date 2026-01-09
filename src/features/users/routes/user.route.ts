@@ -1,7 +1,7 @@
-import { Router } from "express";
-import { verifyUser } from "../../../global/middlewares/verify.user.middleware.js";
-import asyncWrapper from "../../../global/cores/asyncWrapper.core.js";
-import { userController } from "../controllers/user.controller.js";
+import { Router } from 'express';
+import { verifyUser } from '../../../global/middlewares/verify.user.middleware.js';
+import asyncWrapper from '../../../global/core/asyncWrapper.core.js';
+import { userController } from '../controllers/user.controller.js';
 
 const userRouter = Router();
 

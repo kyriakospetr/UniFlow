@@ -6,19 +6,24 @@ import { StatusCodes } from "http-status-codes";
 import path from 'path';
 import './global/config/passport.config.ts';
 import passport from 'passport';
+import http from 'http'; // Χρειαζόμαστε το http module
+import { initSocket } from './global/config/socket.config.js';
 
 class Server {
     private app: Application;
+    private httpServer: http.Server;
     private port: number = 3000;
 
     constructor() {
         this.app = express();
+        this.httpServer = http.createServer(this.app);
     }
 
     public start(): void {
         this.setupMiddleware();
         this.setupExpressConfig();
         this.setupRoutes();
+        this.setupSocket();
         this.setupErrorHandler();
         this.setupServer();
     }
@@ -38,6 +43,10 @@ class Server {
         this.app.use(pageRouter);
     }
 
+    private setupSocket(): void {
+        initSocket(this.httpServer);
+    }
+
     private setupErrorHandler(): void {
         //404
         this.app.use((req: Request, res:Response, next: NextFunction) => {
@@ -51,14 +60,15 @@ class Server {
             const statusCode = err.statusCode || 500;
             res.status(statusCode).json({
                 status: err.status || 'error',
-                message: err.message || 'Internal server error'
+                message: err.message || 'Internal server error',
+                data: err.data || null,
             });
         });
     }
 
     private setupServer(): void {
-        this.app.listen(this.port, () => {
-            console.log(`Connected to Server with Port ${this.port}`);
+        this.httpServer.listen(this.port, () => {
+            console.log(`Connected to Server with Port ${this.port} (WebSockets enabled)`);
         });
     }
 }

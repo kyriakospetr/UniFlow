@@ -45,25 +45,32 @@ body {
     font-size: 1.2rem;
 }
 
-.feed-card {
-    background: white;
-    border: none;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    margin-bottom: 20px;
+#chat-messages::-webkit-scrollbar {
+    width: 6px;
 }
 
+#chat-messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#chat-messages::-webkit-scrollbar-thumb {
+    background: #d1d1d1;
+    border-radius: 10px;
+}
+
+#chat-messages::-webkit-scrollbar-thumb:hover {
+    background: #bbb;
+}
+
+#chat-input:focus {
+    box-shadow: none;
+    background-color: #eee !important;
+}
 .chat-popup {
-    display: none;
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 400px;
-    z-index: 1000;
+    animation: slideUp 0.3s ease-out;
 }
 
-.card-body {
-    height: 250px; 
-    overflow-y: auto; 
-    background: #f8f9fa
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }

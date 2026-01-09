@@ -33,23 +33,33 @@ model User {
 }
 
 model Contact {
-  // User follows buddy, but buddy doesn't need to follow user
-  id               String   @id @default(uuid())
-  userId           String   
-  buddyId          String   
+  id            String   @id @default(uuid())
+  userId        String   // User who sent the request
+  targetUserId String    // User who is added 
 
-  // Foreign Keys
-  user             User     @relation("UserInitiated", fields: [userId], references: [id])
-  buddy            User     @relation("UserReceived", fields: [buddyId], references: [id])
+  // Relations
+  user          User     @relation("UserInitiated", fields: [userId], references: [id])
+  targetUser   User     @relation("UserReceived", fields: [targetUserId], references: [id])
 
-  // Unique
-  @@unique([userId, buddyId]) 
+  createdAt     DateTime @default(now())
+
+  @@unique([userId, targetUserId]) 
+}
+
+enum ConversationType {
+  PRIVATE
+  GROUP
 }
 
 model Conversation {
   id        String    @id @default(uuid())
-  isGroup   Boolean   @default(false)
+  type      ConversationType  @default(PRIVATE)
   name      String?   //Group chat name
+  updatedAt DateTime @updatedAt
+
+  // Fast Inbox
+  lastMessageContent String?
+  lastMessageAt      DateTime?      @default(now())
 
   // Who participates and the messages
   participants User[] @relation("ConversationParticipants")

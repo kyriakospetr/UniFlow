@@ -5,6 +5,7 @@ import { verifyUser } from '../middlewares/verify.user.middleware.js';
 
 const pageRouter = Router();
 
+// Page routes
 pageRouter.get('/login', (req: Request, res: Response) => {
     res.sendFile(path.join(process.cwd(), 'public', 'login.html'));
 });
