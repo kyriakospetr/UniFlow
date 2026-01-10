@@ -30,7 +30,33 @@ model User {
   // Chat
   conversations Conversation[] @relation("ConversationParticipants")
   sentMessages  Message[]      @relation("UserSentMessages")
+
+  // Posts
+  posts    Post[]
 }
+
+enum PostCategory {
+  HOBBY
+  STUDY
+  TEAM
+}
+
+model Post {
+  id          String       @id @default(uuid())
+  title       String
+  content     String       
+  
+  category    PostCategory 
+  
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt 
+
+  authorId    String
+  author      User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([category])
+}
+
 
 model Contact {
   id            String   @id @default(uuid())

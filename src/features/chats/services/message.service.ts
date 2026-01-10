@@ -34,7 +34,7 @@ class MessageService {
         return messages;
     }
 
-    public async sendMessage(currentUser: UserPayload, conversationId: string ,reqBody: SendMessageDTO): Promise<SendMessageResponse> {
+    public async sendMessage(reqBody: SendMessageDTO, currentUser: UserPayload, conversationId: string): Promise<SendMessageResponse> {
         const { content } = reqBody;
 
         // Current user doesn't belong to conversation

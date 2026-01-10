@@ -19,7 +19,7 @@ class MessageController {
         const currentUser = req.currentUser as UserPayload;
         const conversationId = req.params.id;
 
-        const { message, conversation } = await messageService.sendMessage(currentUser, conversationId, req.body);
+        const { message, conversation } = await messageService.sendMessage(req.body, currentUser, conversationId);
 
         // Live: We update the inbox, conversation of every participant
         const io = getIO();
