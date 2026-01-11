@@ -1,4 +1,4 @@
-import { elements } from '../../core/elements.js';
+import { elements } from './elements.js';
 import {fetchContacts} from '../contacts/contacts.js'
 import { openChat } from './chat.popup.js';
 

@@ -1,5 +1,5 @@
 // inbox.js
-import { elements } from '../../core/elements.js';
+import { elements } from './elements.js';
 import { state } from '../../core/state.js';
 import { openChatWithIds } from './chat.popup.js';
 import { openNewChatPopup } from './new.chat.popup.js';

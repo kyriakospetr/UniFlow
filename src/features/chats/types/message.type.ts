@@ -1,20 +1,18 @@
-import { ConversationResponse } from "./conversation.type.js";
+import { Prisma } from "../../../../generated/prisma/client.js";
+import { ConversationWithParticipantsInfo } from "./conversation.type.js";
 
-type SenderInfo = {
-  id: string;
-  username: string;
-};
-
-export type MessageResponse = {
-  id: string;
-  content: string;
-  createdAt: Date;
-  conversationId: string;
-  senderId: string;
-  sender: SenderInfo; 
-};
+export type MessageWithSenderInfo = Prisma.MessageGetPayload<{
+    include: {
+        sender: {
+            select: {
+                id: true;
+                username: true;
+            };
+        };
+    };
+}>;
 
 export type SendMessageResponse = {
-  message: MessageResponse;
-  conversation: ConversationResponse;
+    message: MessageWithSenderInfo;
+    conversation: ConversationWithParticipantsInfo;
 };

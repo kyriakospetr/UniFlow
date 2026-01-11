@@ -3,6 +3,7 @@ import { socket } from './core/socket.js';
 import { initChatSystem } from './features/chats/chat.initialize.js';
 import { renderInbox } from './features/chats/inbox.js';
 import { renderSearch, renderContacts } from './features/contacts/contacts.js';
+import { initPostsEvents,renderPostsView } from './features/posts/post.js';
 
 async function initApp() {
     try {
@@ -10,8 +11,9 @@ async function initApp() {
         // So we can load the feed based on the current user
         await fetchCurrentUser();
         initChatSystem();
+        initPostsEvents();
         setupEventListeners();
-        loadFeed();
+        await renderPostsView();
     } catch (error) {
         console.error('App initialization failed:', error);
         window.location.replace('/login');
@@ -58,7 +60,7 @@ function setupEventListeners() {
 
     const navConfig = {
         'nav-feed': () => {
-            loadFeed();
+            renderPostsView();
         },
         'nav-buddies': () => {
             renderSearch();
@@ -88,18 +90,6 @@ function setupEventListeners() {
 function updateActiveNav(activeElement) {
     document.querySelectorAll('.nav-link').forEach((link) => link.classList.remove('active'));
     activeElement.classList.add('active');
-}
-
-// TODO: loadFeed should load posts
-function loadFeed() {
-    const feedArea = document.getElementById('feedArea');
-    if (!feedArea) return;
-    feedArea.innerHTML = `
-        <section class="feed-container">
-            <h4>Welcome to Portal Feed, ${state.user?.username}</h4>
-            <p>Latest updates...</p>
-        </section>
-    `;
 }
 
 document.addEventListener('DOMContentLoaded', initApp);

@@ -1,10 +1,10 @@
 // chatManager.js
-import { elements } from '../../core/elements.js';
+import {elements} from './elements.js'
 import { socket } from '../../core/socket.js';
 import { state } from '../../core/state.js';
 import { appendMessageToUI, closeChatPopup, sendMessage } from './chat.popup.js';
 import { createInboxElement } from './inbox.js';
-import { showNotification } from '../../utils/notifications.js';
+import { showMessageNotification } from '../../utils/notifications.js';
 import { closeNewChatPopup, handleStartNewChat } from './new.chat.popup.js';
 
 export function initChatSystem() {
@@ -45,7 +45,7 @@ export function initChatSystem() {
 
         // Notification
         if (message.senderId !== state.user.id && !isLookingAtThisChat) {
-            showNotification(message);
+            showMessageNotification(message);
         }
     });
 

@@ -2,25 +2,18 @@ import { ConversationType } from '../../../../generated/prisma/client.js';
 import { BadRequestException, ConflictException, UnAuthorizedException } from '../../../global/core/error.core.js';
 import { prisma } from '../../../prisma.js';
 import { CreateConversationDTO } from '../interfaces/conversation.interface.js';
-import { ConversationResponse } from '../types/conversation.type.js';
+import { ConversationWithParticipantsInfo } from '../types/conversation.type.js';
 
 class ConversationService {
-    public async getConversations(currentUser: UserPayload): Promise<ConversationResponse[]> {
+    public async getConversations(currentUser: UserPayload): Promise<ConversationWithParticipantsInfo[]> {
         // Load all conversations
         // We don't call the isConversationParticipant here because
         // We get the conversations of the current user  by field participants
         const conversations = await prisma.conversation.findMany({
             where: {
-                participants: {
-                    some: { id: currentUser.id },
-                },
+                participants: { some: { id: currentUser.id } },
             },
-            select: {
-                id: true,
-                type: true,
-                name: true,
-                lastMessageContent: true,
-                lastMessageAt: true,
+            include: {
                 participants: {
                     select: {
                         id: true,
@@ -28,15 +21,13 @@ class ConversationService {
                     },
                 },
             },
-            orderBy: {
-                updatedAt: 'desc',
-            },
+            orderBy: { updatedAt: 'desc' },
         });
 
         return conversations;
     }
 
-    public async getConversation(currentUser: UserPayload, conversationId: string): Promise<ConversationResponse | null> {
+    public async getConversation(currentUser: UserPayload, conversationId: string): Promise<ConversationWithParticipantsInfo | null> {
         // Current user doesn't belong to conversation
         const authorized = await this.isConversationParticipant(currentUser.id, conversationId);
         if (!authorized) {
@@ -46,13 +37,7 @@ class ConversationService {
         // Return the conversation
         const conversation = await prisma.conversation.findUnique({
             where: { id: conversationId },
-            select: {
-                id: true,
-                type: true,
-                name: true,
-                lastMessageContent: true,
-                lastMessageAt: true,
-                // Εδώ βάζεις τα participants με το δικό τους select
+            include: {
                 participants: {
                     select: {
                         id: true,
@@ -61,11 +46,10 @@ class ConversationService {
                 },
             },
         });
-
         return conversation;
     }
 
-    public async createConversation(reqBody: CreateConversationDTO, currentUser: UserPayload): Promise<ConversationResponse> {
+    public async createConversation(reqBody: CreateConversationDTO, currentUser: UserPayload): Promise<ConversationWithParticipantsInfo> {
         const { participantsIds, groupName } = reqBody;
 
         // All participants ids including the user that made the request
@@ -87,13 +71,13 @@ class ConversationService {
         if (type === ConversationType.PRIVATE) {
             const targetUserId = participantsIds[0];
 
-            //We only need to return the id 
+            //We only need to return the id
             const existing = await prisma.conversation.findFirst({
                 where: {
                     type: ConversationType.PRIVATE,
                     AND: [{ participants: { some: { id: currentUser.id } } }, { participants: { some: { id: targetUserId } } }],
                 },
-                select: { id: true }, 
+                select: { id: true },
             });
 
             // Private chat already exists, we return the id so the frontend can render the conversation
@@ -113,12 +97,7 @@ class ConversationService {
                     connect: participantSetIds.map((id) => ({ id })),
                 },
             },
-            select: {
-                id: true,
-                type: true,
-                name: true,
-                lastMessageContent: true,
-                lastMessageAt: true,
+            include: {
                 participants: {
                     select: {
                         id: true,
@@ -140,7 +119,7 @@ class ConversationService {
                     some: { id: userId },
                 },
             },
-            select: { id: true }
+            select: { id: true },
         });
         return !!conversation;
     }

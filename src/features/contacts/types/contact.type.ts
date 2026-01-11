@@ -1,6 +1,8 @@
-// Now we only return the buddy information id, username
-// There is no need to return the whole Contact Object
-export type targetUserInfoResponse = {
-  id: string;
-  username: string;
-};
+import { Prisma } from "../../../../generated/prisma/client.js";
+
+export type ContactTargetUserInfo = Prisma.UserGetPayload<{
+  select: {
+    id: true;
+    username: true;
+  };
+}>;

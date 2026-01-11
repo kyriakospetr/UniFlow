@@ -1,15 +1,8 @@
-import { ConversationType } from "../../../../generated/prisma/enums.js";
+import { Prisma } from "../../../../generated/prisma/client.js";
 
-type ParticipantInfo = {
-  id: string;
-  username: string;
-};
-
-export type ConversationResponse = {
-  id: string;
-  type: ConversationType;
-  name?: string | null;
-  lastMessageContent?: string | null; // Πρόσθεσέ το για το preview στο inbox
-  lastMessageAt?: Date | null;       // Αυτό αντικαθιστά ή συμπληρώνει το updatedAt
-  participants: ParticipantInfo[];
-};
+// Ορίζουμε τον τύπο που αντιστοιχεί στο include/select που κάνεις
+export type ConversationWithParticipantsInfo = Prisma.ConversationGetPayload<{
+    include: {
+        participants: { select: { id: true; username: true } };
+    };
+}>;

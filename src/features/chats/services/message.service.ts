@@ -1,11 +1,11 @@
 import { UnAuthorizedException } from '../../../global/core/error.core.js';
 import { prisma } from '../../../prisma.js';
 import { SendMessageDTO } from '../interfaces/message.interface.js';
-import { MessageResponse, SendMessageResponse } from '../types/message.type.js';
+import { MessageWithSenderInfo, SendMessageResponse } from '../types/message.type.js';
 import { conversationService } from './conversation.service.js';
 
 class MessageService {
-    public async getMessages(currentUser: UserPayload, conversationId: string): Promise<MessageResponse[]> {
+    public async getMessages(currentUser: UserPayload, conversationId: string): Promise<MessageWithSenderInfo[]> {
 
         // Current user doesn't belong to conversation
         const authorized = await conversationService.isConversationParticipant(currentUser.id, conversationId);

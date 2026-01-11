@@ -2,12 +2,13 @@ import express, { type Request, type Response, type Application, type NextFuncti
 import cookieParser from 'cookie-parser';
 import appRoutes from './global/routes/app.routes.js';
 import pageRouter from './global/routes/page.routes.js';
-import { StatusCodes } from "http-status-codes";
+import { StatusCodes } from 'http-status-codes';
 import path from 'path';
 import './global/config/passport.config.ts';
 import passport from 'passport';
 import http from 'http'; // Χρειαζόμαστε το http module
 import { initSocket } from './global/config/socket.config.js';
+import { Prisma } from '../generated/prisma/client.js';
 
 class Server {
     private app: Application;
@@ -34,7 +35,7 @@ class Server {
         this.app.use(passport.initialize());
     }
 
-    private setupExpressConfig():void {
+    private setupExpressConfig(): void {
         this.app.use(express.static(path.join(process.cwd(), 'public')));
     }
 
@@ -49,19 +50,35 @@ class Server {
 
     private setupErrorHandler(): void {
         //404
-        this.app.use((req: Request, res:Response, next: NextFunction) => {
+        this.app.use((req: Request, res: Response, next: NextFunction) => {
             return res.status(StatusCodes.NOT_FOUND).json({
-                message: `The URL ${req.originalUrl} not found for method ${req.method}`
+                message: `The URL ${req.originalUrl} not found for method ${req.method}`,
             });
         });
 
         //Error Handler
         this.app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-            const statusCode = err.statusCode || 500;
+            let statusCode = err.statusCode || 500;
+            let message = err.message || 'Internal server error';
+            let data = err.data || null;
+
+            // Prisma erros
+            if (
+                err instanceof Prisma.PrismaClientKnownRequestError ||
+                err instanceof Prisma.PrismaClientValidationError ||
+                err instanceof Prisma.PrismaClientInitializationError
+            ) 
+            {
+                statusCode = 500;
+                message = 'Error syncing database';
+                data = null;
+            }
+
+            // Send response
             res.status(statusCode).json({
                 status: err.status || 'error',
-                message: err.message || 'Internal server error',
-                data: err.data || null,
+                message,
+                data,
             });
         });
     }

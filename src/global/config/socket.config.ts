@@ -57,6 +57,8 @@ export const initSocket = (httpServer: HTTPServer) => {
             }
         });
 
+        // TODO: only buddies can listen to posts
+
         socket.on('disconnect', () => {
             console.log(`User disconnected: ${user.username} (socket ID: ${socket.id})`);
         });

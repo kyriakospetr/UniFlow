@@ -2,10 +2,10 @@ import { BadRequestException, ConflictException, NotFoundException } from '../..
 import { prisma } from '../../../prisma.js';
 import { userService } from '../../users/services/user.service.js';
 import { AddContactDTO } from '../interfaces/contact.interface.js';
-import { targetUserInfoResponse} from '../types/contact.type.js';
+import { ContactTargetUserInfo } from '../types/contact.type.js';
 
 class ContactService {
-    public async createContact(reqBody: AddContactDTO, currentUser: UserPayload): Promise<targetUserInfoResponse> {
+    public async createContact(reqBody: AddContactDTO, currentUser: UserPayload): Promise<ContactTargetUserInfo> {
         const { username } = reqBody;
 
         const targetUser = await userService.findUserByUsername(username);
@@ -50,7 +50,7 @@ class ContactService {
         return contact.targetUser;
     }
 
-    public async getContacts(currentUser: UserPayload): Promise<targetUserInfoResponse[]> {
+    public async getContacts(currentUser: UserPayload): Promise<ContactTargetUserInfo[]> {
         const contacts = await prisma.contact.findMany({
             where: { userId: currentUser.id },
             select: {

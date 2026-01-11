@@ -1,4 +1,4 @@
-import { elements } from '../../core/elements.js';
+import { elements } from './elements.js';
 import { socket } from '../../core/socket.js';
 import { state } from '../../core/state.js'; 
 
