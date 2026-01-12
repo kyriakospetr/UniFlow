@@ -20,7 +20,7 @@ export async function openNewChatPopup() {
 
         list.forEach((user) => { 
             const div = document.createElement('div');
-            div.className = 'd-flex align-items-center p-2 rounded border buddy-chip';
+            div.className = 'd-flex align-items-center buddy-chip';
             div.style.cursor = 'pointer';
             div.dataset.id = user.id;
             div.innerHTML = `

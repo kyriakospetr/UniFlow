@@ -2,7 +2,7 @@ import { BadRequestException, ConflictException, NotFoundException } from '../..
 import { prisma } from '../../../prisma.js';
 import { userService } from '../../users/services/user.service.js';
 import { AddContactDTO } from '../interfaces/contact.interface.js';
-import { ContactTargetUserInfo } from '../types/contact.type.js';
+import { ContactTargetUserInfo, ContactUserInfo } from '../types/contact.type.js';
 
 class ContactService {
     public async createContact(reqBody: AddContactDTO, currentUser: UserPayload): Promise<ContactTargetUserInfo> {
@@ -66,6 +66,18 @@ class ContactService {
         // Prisma will return [{ buddy: {...} }, { buddy: {...} }]
         // We need to map so we get the inside object
         return contacts.map((c) => c.targetUser);
+    }
+
+    public async getFollowers(currentUser: UserPayload): Promise<ContactUserInfo[]> {
+        const followers = await prisma.contact.findMany({
+            where: {
+                targetUserId: currentUser.id, 
+            },
+            select: {
+                userId: true, 
+            },
+        });
+        return followers;
     }
 }
 

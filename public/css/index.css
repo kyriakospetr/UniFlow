@@ -75,7 +75,6 @@ body {
     to { transform: translateY(0); opacity: 1; }
 }
 
-/* Add this to your stylesheet */
 .post-card {
     transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
     border: none;
@@ -94,4 +93,27 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 1rem;
+}
+
+#buddyList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 10px;
+}
+
+.buddy-chip {
+    transition: all 0.2s ease-in-out;
+    border: 1px solid #dee2e6 !important;
+    background-color: #f8f9fa;
+    border-radius: 50px !important; 
+    padding: 5px 12px !important;
+    user-select: none;
+}
+
+.buddy-chip.selected {
+    background-color: #e7f1ff !important;
+    border-color: #0d6efd !important;
+    color: #0d6efd !important;
+    box-shadow: 0 2px 4px rgba(13, 110, 253, 0.15);
 }

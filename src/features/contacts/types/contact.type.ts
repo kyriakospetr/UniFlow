@@ -6,3 +6,9 @@ export type ContactTargetUserInfo = Prisma.UserGetPayload<{
     username: true;
   };
 }>;
+
+export type ContactUserInfo = Prisma.ContactGetPayload<{
+  select: {
+    userId: true;
+  };
+}>;

@@ -11,13 +11,13 @@ class PostController {
 
         const post = await postService.createPost(req.body, currentUser);
 
-        const contacts = await contactService.getContacts(currentUser);
+        const followers = await contactService.getFollowers(currentUser);
 
         // Live notifications
         // Send the notifications to your buddies that you created a post
         const io = getIO();
-        contacts.forEach((contact) => {
-            io.to(`user_${contact.id}`).emit('new_post_notification', {
+        followers.forEach((follower) => {
+            io.to(`user_${follower.userId}`).emit('new_post_notification', {
                 title: post.title,
                 author: currentUser.username,
                 category: post.category,

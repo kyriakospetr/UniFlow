@@ -38,6 +38,9 @@ export function initChatSystem() {
                     timeElem.textContent = new Date(conversation.lastMessageAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
             } else {
                 // If its a new conversation we create the inbox element
+                if (elements.inboxList.querySelector('#goFindBuddies')) {
+                    elements.inboxList.innerHTML = ''; 
+                }
                 const newConversation = createInboxElement(conversation);
                 elements.inboxList.prepend(newConversation);
             }
