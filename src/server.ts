@@ -6,13 +6,13 @@ import { StatusCodes } from 'http-status-codes';
 import path from 'path';
 import './global/config/passport.config.ts';
 import passport from 'passport';
-import http from 'http'; // Χρειαζόμαστε το http module
+import http from 'http'; 
 import { initSocket } from './global/config/socket.config.js';
 import { Prisma } from '../generated/prisma/client.js';
 
 class Server {
     private app: Application;
-    private httpServer: http.Server;
+    private httpServer: http.Server; //for socket
     private port: number = 3000;
 
     constructor() {

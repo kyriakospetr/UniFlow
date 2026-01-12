@@ -69,9 +69,6 @@ function setupEventListeners() {
         'nav-messages': () => {
             renderInbox();
         },
-        'nav-todos': () => {
-            /* renderTodos(); */
-        },
     };
 
     Object.entries(navConfig).forEach(([id, renderFn]) => {
