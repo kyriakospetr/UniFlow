@@ -1,5 +1,11 @@
 # Portal Διαχείρισης & Σύνθεσης Ομάδων Εργασίας
 
+![Node.js](https://img.shields.io/badge/Node.js-v24-green?logo=node.js)
+![Express.js](https://img.shields.io/badge/Express.js-5.2.1-lightgrey?logo=express)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue?logo=typescript)
+![Prisma](https://img.shields.io/badge/Prisma-7.2.0-2D3748?logo=prisma)
+![Socket.io](https://img.shields.io/badge/Socket.io-4.8.3-black?logo=socket.io)
+
 **Μάθημα:** Υπηρεσιοστρεφές Λογισμικό (Ακαδημαϊκό Έτος 2025-2026)
 
 ## 👥 Στοιχεία Ομάδας
