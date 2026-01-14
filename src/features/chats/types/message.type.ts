@@ -1,7 +1,7 @@
 import { Prisma } from "../../../../generated/prisma/client.js";
-import { ConversationWithParticipantsInfo } from "./conversation.type.js";
+import { ConversationResponse } from "./conversation.type.js";
 
-export type MessageWithSenderInfo = Prisma.MessageGetPayload<{
+export type MessageResponse = Prisma.MessageGetPayload<{
     include: {
         sender: {
             select: {
@@ -13,6 +13,6 @@ export type MessageWithSenderInfo = Prisma.MessageGetPayload<{
 }>;
 
 export type SendMessageResponse = {
-    message: MessageWithSenderInfo;
-    conversation: ConversationWithParticipantsInfo;
+    message: MessageResponse
+    conversation: ConversationResponse;
 };

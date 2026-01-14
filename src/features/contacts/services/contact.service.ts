@@ -2,13 +2,13 @@ import { BadRequestException, ConflictException, NotFoundException } from '../..
 import { prisma } from '../../../prisma.js';
 import { userService } from '../../users/services/user.service.js';
 import { AddContactDTO } from '../interfaces/contact.interface.js';
-import { ContactTargetUserInfo, ContactUserInfo } from '../types/contact.type.js';
+import { ContactResponse } from '../types/contact.type.js';
 
 class ContactService {
-    public async createContact(reqBody: AddContactDTO, currentUser: UserPayload): Promise<ContactTargetUserInfo> {
+    public async create(reqBody: AddContactDTO, currentUser: UserPayload): Promise<ContactResponse> {
         const { username } = reqBody;
 
-        const targetUser = await userService.findUserByUsername(username);
+        const targetUser = await userService.findByUsername(username);
 
         // Check if target username is valid
         if (!targetUser) {
@@ -50,7 +50,7 @@ class ContactService {
         return contact.targetUser;
     }
 
-    public async getContacts(currentUser: UserPayload): Promise<ContactTargetUserInfo[]> {
+    public async getAll(currentUser: UserPayload): Promise<ContactResponse[]> {
         const contacts = await prisma.contact.findMany({
             where: { userId: currentUser.id },
             select: {
@@ -68,16 +68,21 @@ class ContactService {
         return contacts.map((c) => c.targetUser);
     }
 
-    public async getFollowers(currentUser: UserPayload): Promise<ContactUserInfo[]> {
+    public async getFollowers(currentUser: UserPayload): Promise<ContactResponse[]> {
         const followers = await prisma.contact.findMany({
             where: {
-                targetUserId: currentUser.id, 
+                targetUserId: currentUser.id,
             },
             select: {
-                userId: true, 
+                user: {
+                    select: {
+                        id: true,
+                        username: true
+                    }
+                },
             },
         });
-        return followers;
+        return followers.map((f) => f.user);
     }
 }
 

@@ -1,14 +1,14 @@
 import { UnAuthorizedException } from '../../../global/core/error.core.js';
 import { prisma } from '../../../prisma.js';
 import { SendMessageDTO } from '../interfaces/message.interface.js';
-import { MessageWithSenderInfo, SendMessageResponse } from '../types/message.type.js';
+import { MessageResponse, SendMessageResponse } from '../types/message.type.js';
 import { conversationService } from './conversation.service.js';
 
 class MessageService {
-    public async getMessages(currentUser: UserPayload, conversationId: string): Promise<MessageWithSenderInfo[]> {
+    public async getAll(currentUser: UserPayload, conversationId: string): Promise<MessageResponse[]> {
 
         // Current user doesn't belong to conversation
-        const authorized = await conversationService.isConversationParticipant(currentUser.id, conversationId);
+        const authorized = await conversationService.isParticipant(currentUser.id, conversationId);
         if (!authorized) {
             throw new UnAuthorizedException('You are not authorized to get messages from this conversation');
         }
@@ -34,11 +34,11 @@ class MessageService {
         return messages;
     }
 
-    public async sendMessage(reqBody: SendMessageDTO, currentUser: UserPayload, conversationId: string): Promise<SendMessageResponse> {
+    public async send(reqBody: SendMessageDTO, currentUser: UserPayload, conversationId: string): Promise<SendMessageResponse> {
         const { content } = reqBody;
 
         // Current user doesn't belong to conversation
-        const authorized = await conversationService.isConversationParticipant(currentUser.id, conversationId);
+        const authorized = await conversationService.isParticipant(currentUser.id, conversationId);
         if (!authorized) {
             throw new UnAuthorizedException('You are not authorized');
         }

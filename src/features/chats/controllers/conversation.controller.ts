@@ -3,10 +3,10 @@ import { conversationService } from '../services/conversation.service.js';
 import { StatusCodes } from 'http-status-codes';
 
 class ConversationController {
-    public async getConversations(req: Request, res: Response) {
+    public async getAll(req: Request, res: Response) {
         const currentUser = req.currentUser as UserPayload;
 
-        const conversations = await conversationService.getConversations(currentUser);
+        const conversations = await conversationService.getAll(currentUser);
 
         return res.status(StatusCodes.OK).json({
             message: 'Conversations fetched successfully',
@@ -14,11 +14,11 @@ class ConversationController {
         });
     }
 
-    public async getConversation(req: Request, res: Response) {
+    public async get(req: Request, res: Response) {
         const conversationId = req.params.conversationId;
         const currentUser = req.currentUser as UserPayload;
 
-        const conversation = await conversationService.getConversation(currentUser, conversationId);
+        const conversation = await conversationService.get(currentUser, conversationId);
 
         return res.status(StatusCodes.OK).json({
             message: 'Conversation fetched successfully',
@@ -26,10 +26,10 @@ class ConversationController {
         });
     }
 
-    public async createConversation(req: Request, res: Response) {
+    public async create(req: Request, res: Response) {
         const currentUser = req.currentUser as UserPayload;
 
-        const conversation = await conversationService.createConversation(req.body, currentUser);
+        const conversation = await conversationService.create(req.body, currentUser);
 
         return res.status(StatusCodes.CREATED).json({
             message: 'Conversation created successfully',

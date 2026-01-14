@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import asyncWrapper from '../../../global/core/asyncWrapper.core.js';
+import asyncWrapper from '../../../global/core/async.wrapper.core.js';
 import { authController } from '../controllers/auth.controller.js';
 import { validateSchema } from '../../../global/middlewares/validate.schema.middleware.js';
 import { LoginSchema, SignUpSchema } from '../schema/auth.schema.js';

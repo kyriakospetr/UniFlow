@@ -47,7 +47,7 @@ export const initSocket = (httpServer: HTTPServer) => {
             // We check if the user asking to listen is a participant of the conversations
             // If we didn't do that, every authenticated user who knew the converesation Id
             // Could listen to the conversation messages even if he was not a participant
-            const isMember = await conversationService.isConversationParticipant(user.id, conversationId);
+            const isMember = await conversationService.isParticipant(user.id, conversationId);
 
             if (isMember) {
                 socket.join(conversationId);
@@ -56,8 +56,6 @@ export const initSocket = (httpServer: HTTPServer) => {
                 console.log(`Unauthorized access attempt to ${conversationId}`);
             }
         });
-
-        // TODO: only buddies can listen to posts
 
         socket.on('disconnect', () => {
             console.log(`User disconnected: ${user.username} (socket ID: ${socket.id})`);

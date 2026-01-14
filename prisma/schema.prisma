@@ -22,7 +22,6 @@ model User {
 
   // Social Login
   googleId         String?    @unique
-  facebookId       String?    @unique
 
   sentContacts     Contact[]  @relation("UserInitiated")
   receivedContacts Contact[]  @relation("UserReceived")

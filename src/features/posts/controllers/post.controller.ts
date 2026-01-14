@@ -6,10 +6,10 @@ import { contactService } from '../../contacts/services/contact.service.js';
 import { getIO } from '../../../global/config/socket.config.js';
 
 class PostController {
-    public async createPost(req: Request, res: Response) {
+    public async create(req: Request, res: Response) {
         const currentUser = req.currentUser as UserPayload;
 
-        const post = await postService.createPost(req.body, currentUser);
+        const post = await postService.create(req.body, currentUser);
 
         const followers = await contactService.getFollowers(currentUser);
 
@@ -17,7 +17,7 @@ class PostController {
         // Send the notifications to your buddies that you created a post
         const io = getIO();
         followers.forEach((follower) => {
-            io.to(`user_${follower.userId}`).emit('new_post_notification', {
+            io.to(`user_${follower.id}`).emit('new_post_notification', {
                 title: post.title,
                 author: currentUser.username,
                 category: post.category,
@@ -32,12 +32,12 @@ class PostController {
     }
 
 
-    public async getPosts(req: Request, res: Response) {
+    public async getAll(req: Request, res: Response) {
         const parsedQuery = GetPostsQuerySchema.safeParse(req.query);
 
         // If there is a param we filter by category
         if (parsedQuery.success) {
-            const posts = await postService.getPostsByCategory(parsedQuery.data.category);
+            const posts = await postService.getByCategory(parsedQuery.data.category);
 
             return res.status(StatusCodes.OK).json({
                 message: 'Posts filtered by category fetched successfully',
@@ -45,7 +45,7 @@ class PostController {
             });
         }
         
-        const posts = await postService.getPosts();
+        const posts = await postService.getAll();
         return res.status(StatusCodes.OK).json({
             message: 'Posts fetched successfully',
             data: posts,

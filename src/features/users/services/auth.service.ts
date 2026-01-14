@@ -11,9 +11,9 @@ class AuthService {
         const { email, username, password } = reqBody;
 
         // Check if there is a user with the same email or username
-        const userUniqueEmail = await userService.findUserByEmail(email);
+        const userUniqueEmail = await userService.findByEmail(email);
 
-        const userUniqueUsername = await userService.findUserByUsername(username);
+        const userUniqueUsername = await userService.findByUsername(username);
 
         if (userUniqueEmail) {
             throw new ConflictException('Email is already in use');
@@ -46,7 +46,7 @@ class AuthService {
         const { email, password } = reqBody;
 
         // Find the user
-        const user = await userService.findUserByEmail(email);
+        const user = await userService.findByEmail(email);
 
         // If user is null throw error
         // If password is null throw error
@@ -90,7 +90,7 @@ class AuthService {
 
         if (!user) {
             // Find the user if exists by email (Local)
-            user = await userService.findUserByEmail(email);
+            user = await userService.findByEmail(email);
 
             if (user) {
                 // If exists, we link the googleId with the account
@@ -110,7 +110,7 @@ class AuthService {
                 let uniqueUsername = username;
                 let counter = 1;
 
-                while (await userService.findUserByUsername(uniqueUsername)) {
+                while (await userService.findByUsername(uniqueUsername)) {
                     uniqueUsername = `${username}${counter}`;
                     counter++;
                 }

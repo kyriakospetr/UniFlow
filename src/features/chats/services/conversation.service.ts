@@ -2,10 +2,10 @@ import { ConversationType } from '../../../../generated/prisma/client.js';
 import { BadRequestException, ConflictException, UnAuthorizedException } from '../../../global/core/error.core.js';
 import { prisma } from '../../../prisma.js';
 import { CreateConversationDTO } from '../interfaces/conversation.interface.js';
-import { ConversationWithParticipantsInfo } from '../types/conversation.type.js';
+import { ConversationResponse } from '../types/conversation.type.js';
 
 class ConversationService {
-    public async getConversations(currentUser: UserPayload): Promise<ConversationWithParticipantsInfo[]> {
+    public async getAll(currentUser: UserPayload): Promise<ConversationResponse[]> {
         // Load all conversations
         // We don't call the isConversationParticipant here because
         // We get the conversations of the current user  by field participants
@@ -27,9 +27,9 @@ class ConversationService {
         return conversations;
     }
 
-    public async getConversation(currentUser: UserPayload, conversationId: string): Promise<ConversationWithParticipantsInfo | null> {
+    public async get(currentUser: UserPayload, conversationId: string): Promise<ConversationResponse | null> {
         // Current user doesn't belong to conversation
-        const authorized = await this.isConversationParticipant(currentUser.id, conversationId);
+        const authorized = await this.isParticipant(currentUser.id, conversationId);
         if (!authorized) {
             throw new UnAuthorizedException('You are not authorized to fetch this conversation');
         }
@@ -49,7 +49,7 @@ class ConversationService {
         return conversation;
     }
 
-    public async createConversation(reqBody: CreateConversationDTO, currentUser: UserPayload): Promise<ConversationWithParticipantsInfo> {
+    public async create(reqBody: CreateConversationDTO, currentUser: UserPayload): Promise<ConversationResponse> {
         const { participantsIds, groupName } = reqBody;
 
         // All participants ids including the user that made the request
@@ -110,7 +110,7 @@ class ConversationService {
         return conversation;
     }
 
-    public async isConversationParticipant(userId: string, conversationId: string): Promise<boolean> {
+    public async isParticipant(userId: string, conversationId: string): Promise<boolean> {
         // We check if the current user belongs to the conversation by the id
         const conversation = await prisma.conversation.findFirst({
             where: {

@@ -1,10 +1,10 @@
 import { PostCategory } from '../../../../generated/prisma/enums.js';
 import { prisma } from '../../../prisma.js';
 import { CreatePostDTO } from '../interfaces/post.interface.js';
-import { PostWithAuthor } from '../types/post.type.js';
+import { PostResponse } from '../types/post.type.js';
 
 class PostService {
-    public async createPost(reqBody: CreatePostDTO, currentUser: UserPayload): Promise<PostWithAuthor> {
+    public async create(reqBody: CreatePostDTO, currentUser: UserPayload): Promise<PostResponse> {
         const { title, content, category } = reqBody;
 
         // We include the author details so we can show them on feed
@@ -26,7 +26,7 @@ class PostService {
         return post;
     }
 
-    public async getPosts(): Promise<PostWithAuthor[]> {
+    public async getAll(): Promise<PostResponse[]> {
         return await prisma.post.findMany({
             orderBy: { 
                 createdAt: 'desc' 
@@ -41,7 +41,7 @@ class PostService {
         });
     }
 
-    public async getPostsByCategory(category: PostCategory): Promise<PostWithAuthor[]> {
+    public async getByCategory(category: PostCategory): Promise<PostResponse[]> {
         return await prisma.post.findMany({
             where: { 
                 category 
