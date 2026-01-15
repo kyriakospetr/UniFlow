@@ -94,6 +94,7 @@ function initializeChatSession(conversationId) {
     if (!elements.chatPopup) return;
     elements.chatPopup.dataset.conversationId = conversationId;
     socket.emit('join_chat', conversationId);
+    window.dispatchEvent(new CustomEvent('conversation:open', { detail: { conversationId } }));
 }
 
 async function loadConversationMessages(conversationId) {

@@ -15,7 +15,7 @@ class ConversationController {
     }
 
     public async get(req: Request, res: Response) {
-        const conversationId = req.params.conversationId;
+        const conversationId = req.params.id;
         const currentUser = req.currentUser as UserPayload;
 
         const conversation = await conversationService.get(currentUser, conversationId);

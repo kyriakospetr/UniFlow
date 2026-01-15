@@ -3,7 +3,7 @@ import {elements} from './elements.js'
 import { socket } from '../../core/socket.js';
 import { state } from '../../core/state.js';
 import { appendMessageToUI, closeChatPopup, sendMessage } from './chat.popup.js';
-import { createInboxElement } from './inbox.js';
+import { createInboxElement, formatConversationTime, incrementUnread, clearUnread } from './inbox.js';
 import { showMessageNotification } from '../../utils/notifications.js';
 import { closeNewChatPopup, handleStartNewChat } from './new.chat.popup.js';
 
@@ -15,6 +15,7 @@ export function initChatSystem() {
         const currentConvoId = elements.chatPopup.dataset.conversationId;
         const isChatOpen = elements.chatPopup.style.display === 'block';
         const isLookingAtThisChat = isChatOpen && message.conversationId === currentConvoId;
+        if (!conversation?.id) return;
 
         // Append if chat is open
         if (isLookingAtThisChat && message.senderId !== state.user.id) {
@@ -32,10 +33,9 @@ export function initChatSystem() {
 
                 // We update the last message
                 const preview = existingItem.querySelector('.last-message-preview');
-                const timeElem = existingItem.querySelector('.time');
+                const timeElem = existingItem.querySelector('.last-message-time');
                 if (preview) preview.textContent = conversation.lastMessageContent;
-                if (timeElem)
-                    timeElem.textContent = new Date(conversation.lastMessageAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                if (timeElem) timeElem.textContent = formatConversationTime(conversation.lastMessageAt);
             } else {
                 // If its a new conversation we create the inbox element
                 if (elements.inboxList.querySelector('#goFindBuddies')) {
@@ -46,9 +46,21 @@ export function initChatSystem() {
             }
         }
 
+        const shouldIncrement = message.senderId !== state.user.id && !isLookingAtThisChat;
+        if (shouldIncrement) {
+            incrementUnread(conversation.id);
+        }
+
         // Notification
         if (message.senderId !== state.user.id && !isLookingAtThisChat) {
             showMessageNotification(message);
+        }
+    });
+
+    window.addEventListener('conversation:open', (event) => {
+        const conversationId = event.detail?.conversationId;
+        if (conversationId) {
+            clearUnread(conversationId);
         }
     });
 

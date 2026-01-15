@@ -62,8 +62,9 @@ class ConversationService {
         // Conversation type based on participants
         const type = participantSetIds.length === 2 ? ConversationType.PRIVATE : ConversationType.GROUP;
 
-        if (type === ConversationType.GROUP && groupName == null) {
-            throw new BadRequestException('Group name not provided');
+        let normalizedGroupName = typeof groupName === 'string' ? groupName.trim() : null;
+        if (type === ConversationType.GROUP && !normalizedGroupName) {
+            normalizedGroupName = 'Group Chat';
         }
 
         // We can have many group chats with the same participants
@@ -92,7 +93,7 @@ class ConversationService {
         const conversation = await prisma.conversation.create({
             data: {
                 type,
-                name: groupName,
+                name: type === ConversationType.GROUP ? normalizedGroupName : null,
                 participants: {
                     connect: participantSetIds.map((id) => ({ id })),
                 },

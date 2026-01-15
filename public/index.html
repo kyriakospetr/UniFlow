@@ -36,7 +36,10 @@
                                 <a class="nav-link" href="#buddies" id="nav-buddies"> <i class="bi bi-people me-2"></i> My Buddies </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#messages" id="nav-messages"> <i class="bi bi-chat-left-text me-2"></i> Messages </a>
+                                <a class="nav-link" href="#messages" id="nav-messages">
+                                    <i class="bi bi-chat-left-text me-2"></i> Messages
+                                    <span id="messagesUnreadBadge" class="badge bg-danger rounded-pill ms-2 d-none" aria-label="Unread messages"></span>
+                                </a>
                             </li>
                             <hr class="mx-3" />
                             <li class="nav-item">
@@ -93,7 +96,7 @@
 
                     <div class="mb-2">
                         <label for="groupNameInput" class="form-label fw-semibold text-secondary small text-uppercase">
-                            Group Name <span class="text-muted fw-normal">(Optional)</span>
+                            Group Name
                         </label>
                         <div class="input-group">
                             <span class="input-group-text bg-light border-end-0"><i class="bi bi-people"></i></span>
@@ -104,7 +107,8 @@
                                 placeholder="e.g. Study Group: Databases"
                             />
                         </div>
-                        <div class="form-text mt-2" style="font-size: 0.75rem">If you select more than one buddy, a group name is required.</div>
+                        <div class="form-text mt-2" id="groupNameHelper" style="font-size: 0.75rem">If you select more than one buddy, a group name is required.</div>
+                        <div id="groupNameError" class="text-danger mt-2 small d-none"></div>
                     </div>
                 </div>
 

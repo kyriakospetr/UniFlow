@@ -2,6 +2,19 @@ import { elements } from './elements.js';
 import {fetchContacts} from '../contacts/contacts.js'
 import { openChat } from './chat.popup.js';
 
+function setGroupNameError(message) {
+    const errorEl = document.getElementById('groupNameError');
+    if (!errorEl) return;
+
+    if (message) {
+        errorEl.textContent = message;
+        errorEl.classList.remove('d-none');
+    } else {
+        errorEl.textContent = '';
+        errorEl.classList.add('d-none');
+    }
+}
+
 export async function openNewChatPopup() {
 
     // Client side validation
@@ -12,6 +25,15 @@ export async function openNewChatPopup() {
     buddyList.innerHTML = '';
     if (groupNameInput) { groupNameInput.value = ''; groupNameInput.disabled = true; }
     if (startNewChatBtn) { startNewChatBtn.disabled = true; }
+    setGroupNameError('');
+
+    if (groupNameInput) {
+        groupNameInput.oninput = () => {
+            if (groupNameInput.value.trim().length > 0) {
+                setGroupNameError('');
+            }
+        };
+    }
 
     // Fetch all the user's contacts
     try {
@@ -48,6 +70,9 @@ function toggleTargetUserSelection(element) {
 
     if (groupNameInput) groupNameInput.disabled = selectedCount < 2;
     if (startNewChatBtn) startNewChatBtn.disabled = selectedCount === 0;
+    if (selectedCount < 2) {
+        setGroupNameError('');
+    }
 }
 
 export function closeNewChatPopup() {
@@ -61,10 +86,17 @@ export async function handleStartNewChat() {
     const participantsIds = selected.map(div => div.dataset.id).filter(Boolean);
 
     if (participantsIds.length === 0) return;
-    const groupName = elements.groupNameInput?.value || null;
+    const groupNameRaw = elements.groupNameInput?.value || '';
+    const groupName = groupNameRaw.trim();
+
+    if (participantsIds.length > 1 && !groupName) {
+        setGroupNameError('Group name is required for group chats.');
+        return;
+    }
 
     try {
-        await openChat(participantsIds, groupName);
+        setGroupNameError('');
+        await openChat(participantsIds, groupName || null);
         closeNewChatPopup();
     } catch (err) {
         console.error(err);
